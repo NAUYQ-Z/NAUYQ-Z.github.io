@@ -1,5 +1,5 @@
 /* 预缓存全部静态资源（卡图也在内），离线可用。 */
-const VERSION = 'tarot-v2';
+const VERSION = 'tarot-v3';
 const FILES = [
   "index.html",
   "css/app.css",

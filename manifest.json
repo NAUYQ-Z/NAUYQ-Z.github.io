@@ -3,7 +3,7 @@
   "short_name": "塔罗笔记",
   "description": "本地离线的塔罗笔记：抽一张，记一笔，回头看。",
   "lang": "zh-CN",
-  "id": "/",
+  "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
