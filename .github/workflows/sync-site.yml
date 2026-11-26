@@ -27,16 +27,36 @@ jobs:
           BUNDLE: https://aka.doubaocdn.com/s/JJ4xTpgye6
         run: |
           set -euo pipefail
-          curl -fsSL "$BUNDLE" -o /tmp/site.zip
+          curl -fL --retry 3 --retry-delay 2 -o /tmp/site.zip "$BUNDLE"
           ls -lh /tmp/site.zip
-          unzip -q /tmp/site.zip -d /tmp/unz
-          if [ -d /tmp/unz/pwa ]; then SRC=/tmp/unz/pwa; else SRC=/tmp/unz; fi
-          echo "bundle root: $SRC"
-          test -f "$SRC/index.html"
+          python3 - <<'PY'
+          import os, shutil, zipfile
+          src = '/tmp/site.zip'
+          out = '/tmp/site'
+          shutil.rmtree(out, ignore_errors=True)
+          os.makedirs(out)
+          with zipfile.ZipFile(src) as z:
+              names = z.namelist()
+              for n in names:
+                  p = n.replace('\\', '/').lstrip('/')
+                  for pref in ('pwa/', 'tarot-pwa/'):
+                      if p.startswith(pref):
+                          p = p[len(pref):]
+                  if not p or n.endswith('/'):
+                      continue
+                  dst = os.path.join(out, p)
+                  os.makedirs(os.path.dirname(dst) or out, exist_ok=True)
+                  with open(dst, 'wb') as f:
+                      f.write(z.read(n))
+          print('files extracted:', sum(len(fs) for _, _, fs in os.walk(out)))
+          PY
+          test -f /tmp/site/index.html
+          test -f /tmp/site/manifest.json
+          test -f /tmp/site/js/app.js
           rsync -a --delete \
             --exclude '.git' --exclude '.github' \
-            --exclude 'README.md' --exclude '.nojekyll' --exclude 'test' \
-            "$SRC"/ ./
+            --exclude 'README.md' --exclude '.nojekyll' \
+            /tmp/site/ ./
           git config user.name "tarot-sync"
           git config user.email "tarot-sync@users.noreply.github.com"
           git add -A
