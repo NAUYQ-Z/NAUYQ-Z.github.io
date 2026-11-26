@@ -24,7 +24,7 @@ jobs:
 
       - name: 取回站点包并写回仓库
         env:
-          BUNDLE: https://aka.doubaocdn.com/s/JJ4xTpgye6
+          BUNDLE: https://aka.doubaocdn.com/s/tFnaXOQr0c
         run: |
           set -euo pipefail
           curl -fL --retry 3 --retry-delay 2 -o /tmp/site.zip "$BUNDLE"
@@ -36,8 +36,7 @@ jobs:
           shutil.rmtree(out, ignore_errors=True)
           os.makedirs(out)
           with zipfile.ZipFile(src) as z:
-              names = z.namelist()
-              for n in names:
+              for n in z.namelist():
                   p = n.replace('\\', '/').lstrip('/')
                   for pref in ('pwa/', 'tarot-pwa/'):
                       if p.startswith(pref):
@@ -53,6 +52,7 @@ jobs:
           test -f /tmp/site/index.html
           test -f /tmp/site/manifest.json
           test -f /tmp/site/js/app.js
+          test -f /tmp/site/assets/cards/m00.webp
           rsync -a --delete \
             --exclude '.git' --exclude '.github' \
             --exclude 'README.md' --exclude '.nojekyll' \
