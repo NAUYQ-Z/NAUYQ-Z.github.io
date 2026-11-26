@@ -1,0 +1,25 @@
+{
+  "name": "塔罗笔记",
+  "short_name": "塔罗笔记",
+  "description": "本地离线的塔罗笔记：抽一张，记一笔，回头看。",
+  "lang": "zh-CN",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#EDE8DC",
+  "theme_color": "#EDE8DC",
+  "categories": ["lifestyle", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "新增日运", "url": "./index.html#/daily" },
+    { "name": "新增牌阵", "url": "./index.html#/spread" }
+  ]
+}
